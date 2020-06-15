@@ -1,9 +1,22 @@
 from rest_framework import serializers
-from .models import Post
+from .models import Post, Author
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Author
+        fields = (
+            'username',
+        )
+
+    def get_username(self,obj):
+         return obj.user.username
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
+
     class Meta:
         model = Post
         fields =(
@@ -14,6 +27,16 @@ class PostSerializer(serializers.ModelSerializer):
             'updated',
             'author'
         )
+    #
+    # def get_author(self,obj):
+    #     return obj.author.user.username
 
-    def get_author(self,obj):
-        return obj.author.user.username
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields =(
+            'title',
+            'content',
+            'author'
+        )
