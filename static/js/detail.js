@@ -61,6 +61,26 @@ function updatePost(title, content, author){
   } )
 }
 
+
+function deletePost(postID){
+  const data = {
+    method: "DELETE",
+    headers: {
+      'content-type':"application/json"
+    },
+
+  }
+  fetch(`/api/posts/${postID}/delete/`,data)
+  .then(()=>{
+    window.location='/';
+
+  } )
+  .catch(err =>{
+    console.error(err);
+  } )
+
+}
+
 function prepopulateForm(data){
   title.value = data.title;
   content.value =data.content;
@@ -107,6 +127,8 @@ function renderPost(post){
   append(div,lastUpdated);
   append(root,div);
 
+  appendDeleteBtn(post);
+
 }
 
 function appendAuthor(data) {
@@ -116,6 +138,16 @@ function appendAuthor(data) {
     append(title, author);
 }
 
-
+function appendDeleteBtn(post){
+  const postDiv = document.querySelector('.post-item');
+  const deleteBtn = createNode('button');
+  deleteBtn.className ='post-delete-btn';
+  deleteBtn.innerText = 'Delete';
+  deleteBtn.addEventListener(
+    'click', e => {
+      deletePost(post.id);
+    });
+  append(postDiv, deleteBtn);
+}
 
 getPost(postID);
